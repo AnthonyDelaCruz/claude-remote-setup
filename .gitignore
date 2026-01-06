@@ -1,0 +1,39 @@
+# Machine-specific overrides
+*.local.*
+*.private.*
+.local/
+.private/
+
+# Environment and credentials
+.env
+.env.*
+credentials.json
+secrets.json
+*.key
+*.pem
+
+# Claude-specific
+.claude/CLAUDE.local.md
+.claude/settings.local.json
+.claude/mcp/servers.local.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+logs/
+debug/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
