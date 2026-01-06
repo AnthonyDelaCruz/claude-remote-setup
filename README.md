@@ -4,11 +4,11 @@ A portable Claude Code configuration with reusable skills.
 
 ## What's Included
 
-| Skill | Description | Triggers |
-|-------|-------------|----------|
-| **test-gen** | Generate comprehensive tests | "write tests", "generate tests", "add test coverage" |
-| **refactor** | Guide safe code refactoring | "refactor this", "clean up code", "reduce complexity" |
-| **docs-gen** | Create code documentation | "document this", "write README", "create API docs" |
+| Skill        | Description                  | Triggers                                              |
+| ------------ | ---------------------------- | ----------------------------------------------------- |
+| **test-gen** | Generate comprehensive tests | "write tests", "generate tests", "add test coverage"  |
+| **refactor** | Guide safe code refactoring  | "refactor this", "clean up code", "reduce complexity" |
+| **docs-gen** | Create code documentation    | "document this", "write README", "create API docs"    |
 
 ## Quick Start
 
@@ -23,19 +23,7 @@ A portable Claude Code configuration with reusable skills.
 
 ## Customization
 
-Create a `CLAUDE.local.md` file in `~/.claude/` for machine-specific settings that you don't want to share:
-
-```markdown
-# Local Overrides
-
-## Work-Specific
-- Follow company style guide
-- Use internal package registry
-```
-
-## Adding Custom Skills
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for instructions on creating your own skills.
+This is meant to be a root skills file, if you want to add more specific skills based on your project, you can add your own `~/.claude/skills` directory for your project and add your custom specific skills there, but if you want to change what this currently has then feel free to do so. 💯
 
 ## License
 
