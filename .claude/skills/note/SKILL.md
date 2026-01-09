@@ -2,68 +2,42 @@
 name: note
 description: Create, search, and update notes in Obsidian vault. Use when user asks to "take notes", "create a note", "document this", "save to notes", "learn [topic]", "start learning session", or "review my notes".
 user-invocable: true
+allowed-tools: Read, Write, Edit, Grep, Glob, Bash
 ---
 
 # Obsidian Note Management
 
-Create, search, and update notes in your Obsidian vault with support for general note-taking and specialized learning workflows.
+Create, search, and update notes in Obsidian vault with support for general note-taking and learning workflows.
+
+## Quick Reference
+
+| Note Type | Trigger Keywords | Reference Files |
+|-----------|-----------------|-----------------|
+| Meeting | meeting, standup, sync, planning | [templates.md](templates.md) |
+| Code Doc | document code, implementation, technical | [templates.md](templates.md) |
+| Daily | daily, work log, journal | [templates.md](templates.md) |
+| Reference | reference, knowledge, how-to | [templates.md](templates.md) |
+| Learning | learn, study, learning session | [learning-notes.md](learning-notes.md) |
+
+For complete examples: [examples/](examples/)
 
 ## Workflow
 
-1. **Understand the request**:
-   - Operation: create, search, update, or specialized workflow
-   - Note type: meeting, code doc, daily, reference, learning session
-   - Content: what needs to be documented
+1. **Detect note type** from user request
+2. **Find vault:** `bash scripts/find-vault.sh` (ask user if not found)
+3. **Load reference:** templates.md or learning-notes.md based on type
+4. **Execute:** Create, search, or update note
+5. **Confirm:** Show location and preview
 
-2. **Detect note type and load appropriate reference**:
+## Operations
 
-   **General notes** → Use [templates.md](templates.md)
-   - Meeting, code documentation, daily, reference notes
+**CREATE:** Generate frontmatter → Create filename → Save to vault
+**SEARCH:** Grep vault for keywords/tags → Return results with paths
+**UPDATE:** Read note → Preserve frontmatter → Append with timestamp
 
-   **Learning sessions** → Use [learning-notes.md](learning-notes.md)
-   - Trigger: "learn", "study", "learning session about [topic]"
-   - Creates directory-based structure with goals + reflection files
-   - Supports progressive learning (Foundation → Intermediate → Advanced)
+## Standards
 
-3. **Locate Obsidian vault**:
-   ```bash
-   # Auto-detect vault (handles spaces in paths)
-   VAULT_OBSIDIAN=$(find "$HOME/Documents" -name ".obsidian" -type d -maxdepth 3 2>/dev/null | head -1)
-
-   if [ -n "$VAULT_OBSIDIAN" ]; then
-       VAULT=$(dirname "$VAULT_OBSIDIAN")
-   else
-       # Ask user for vault location
-   fi
-   ```
-   - If not found, ask user once and remember for session
-   - Verify `.obsidian` folder exists
-
-4. **Execute operation**:
-
-   **CREATE:**
-   - Load appropriate template
-   - Generate frontmatter (title, date, tags, context)
-   - Create descriptive filename (kebab-case, e.g., `meeting-sprint-planning-2026-01-08.md`)
-   - Check for conflicts, save to vault
-
-   **SEARCH:**
-   - Use Grep to search vault for keywords/tags
-   - Return results with paths, let user select
-
-   **UPDATE:**
-   - Read existing note, preserve frontmatter
-   - Append new content with timestamp marker
-   - Save updated note
-
-5. **Confirm with user**:
-   - Show note location(s) created/updated
-   - Provide quick preview
-   - Next steps
-
-## Frontmatter Standards
-
-**Required fields:**
+### Frontmatter (Required)
 ```yaml
 ---
 title: Note Title
@@ -72,77 +46,32 @@ tags: [tag1, tag2]
 ---
 ```
 
-**Optional fields:**
-- `context: work | personal` - For cross-device filtering
-- `status: active | completed | archived`
-- `attendees: []` - Meeting notes
-- `linked-goals: "[[goals-topic]]"` - Learning notes
-- `project: name` - Project-specific notes
+Optional: `context: work|personal`, `status: active|completed`, `attendees: []`, `project: name`
 
-**Tag conventions:** Lowercase, hyphenated (e.g., `[meeting, sprint-planning]`, `[learning, react, work]`)
-
-## Filename Conventions
-
-**Format:** `[type-prefix]-[descriptive-name]-[date-if-needed].md`
-
-**Rules:**
-- Lowercase with hyphens (kebab-case)
-- Descriptive and searchable
-- Include date for time-sensitive notes
-- Max 60 characters
-
-**Examples:**
+### Filenames
+Format: `[type]-[name]-[date].md` (kebab-case, max 60 chars)
 - `meeting-sprint-planning-2026-01-08.md`
 - `code-auth-implementation.md`
 - `daily-2026-01-08.md`
-- `goals-authentication-patterns.md` (learning)
+- `goals-authentication-patterns.md`
 
-**Conflicts:** Check if user wants to update existing or create new with number suffix.
-
-## Quality Checklist
-
-**Content:**
-- Clear title, well-organized sections
-- Proper markdown (headings, lists, code blocks)
-- Action items use `- [ ]` checkbox syntax
-
-**Frontmatter:**
-- Valid YAML with title, date, tags
-- Context field for work/personal filtering
-
-**File:**
+### Quality Checklist
+- Valid YAML frontmatter with title, date, tags
 - Descriptive filename, no conflicts
-- Saved to correct location
+- Action items use `- [ ]` checkbox syntax
+- Links use `[[note-name]]` format
 
-## Key Features
+## Learning Sessions
 
-### Context-Aware Content
-- **Generic vs Tool-Specific:** Detect from user's language
-  - Generic: "learn about", "understand", "fundamentals"
-  - Tool-specific: "how do I use", "guide to [tool]"
-- **Work vs Personal:** Ask user, add to frontmatter for filtering
+Special workflow for structured learning:
+- Creates `/Learning/[topic]/` directory
+- Goals file (AI-generated roadmap) + Reflection files (user content)
+- Progressive levels: Foundation 🌱 → Intermediate 🌿 → Advanced 🌳
 
-### Learning Sessions
-- Ask knowledge level (Beginner/Intermediate/Advanced)
-- Structure goals into Foundation 🌱 → Intermediate 🌿 → Advanced 🌳
-- Create directory structure: `/Learning/[topic]/goals-[topic].md` + `/Learning/[topic]/[subtopic].md`
-- Goals file acts as hub linking all reflection files
-- All learning sessions organized under `/Learning/` directory
-
-### Content Organization
-- Use heading hierarchy (#, ##, ###)
-- Link related notes using `[[note-name]]`
-- Code blocks with language tags
-- Keep tags consistent across notes
+See [learning-notes.md](learning-notes.md) for complete workflow.
 
 ## Troubleshooting
 
-**Vault not found:** Ask for path, verify `.obsidian` exists
-**Invalid frontmatter:** Check YAML syntax (dashes, indentation)
-**Large notes:** Warn if >5000 lines, suggest splitting
-
----
-
-See [templates.md](templates.md) for note templates.
-See [learning-notes.md](learning-notes.md) for learning workflow.
-See [examples.md](examples.md) for complete examples.
+- **Vault not found:** Run `bash scripts/find-vault.sh`, ask user if empty
+- **Invalid frontmatter:** Check YAML syntax (dashes, indentation)
+- **Large notes:** Warn if >5000 lines, suggest splitting
