@@ -6,59 +6,46 @@ user-invocable: true
 
 # Test Generation
 
-Generate comprehensive, well-structured tests for the provided code, automatically detecting the testing framework and following project patterns.
+Generate comprehensive, well-structured tests following project patterns and framework conventions.
 
 ## Workflow
 
-1. **Analyze the code** to understand its purpose, inputs, outputs, and edge cases
-2. **Detect the testing framework** by examining:
-   - Existing test files in the project
-   - Package.json, requirements.txt, go.mod, or Gemfile
-   - File extensions and project structure
-3. **Identify test scenarios** including:
-   - Happy path (normal, expected inputs)
-   - Edge cases (boundary values, empty inputs, nulls)
-   - Error conditions (invalid inputs, exceptions)
-   - Integration points (mocks, stubs for dependencies)
-4. **Generate tests** following:
-   - Project naming conventions
-   - Existing test patterns and organization
-   - Framework best practices
-   - Clear, descriptive test names
-5. **Organize tests** logically with:
-   - Descriptive test suite/describe blocks
-   - Setup/teardown where appropriate
-   - Clear arrange-act-assert structure
-   - Comments for complex test logic
+1. **Analyze** - Understand purpose, inputs, outputs, edge cases
+2. **Detect framework** - Check existing tests, package files, project structure
+3. **Identify scenarios** - Happy path, edge cases, errors, mocks needed
+4. **Generate tests** - Follow naming conventions, existing patterns
+5. **Organize** - Describe blocks, setup/teardown, arrange-act-assert
 
 ## Framework Detection
 
-Common frameworks and their indicators:
-- **JavaScript/TypeScript**: Jest, Mocha, Vitest, Jasmine (package.json)
-- **Python**: pytest, unittest (requirements.txt, test file patterns)
-- **Go**: testing package (test files ending in _test.go)
-- **Ruby**: RSpec, Minitest (Gemfile, test/spec directories)
-- **Java**: JUnit, TestNG (pom.xml, build.gradle)
-- **C#**: xUnit, NUnit, MSTest (*.csproj files)
+| Language | Common Frameworks | Indicators |
+|----------|-------------------|------------|
+| JS/TS | Jest, Vitest, Mocha | package.json |
+| Python | pytest, unittest | requirements.txt, test_*.py |
+| Go | testing | *_test.go files |
+| Ruby | RSpec, Minitest | Gemfile, spec/ |
+| Java | JUnit, TestNG | pom.xml, build.gradle |
 
-## Test Quality Guidelines
+## Test Scenarios
 
-- **Clear test names**: Describe what is being tested and expected outcome
-- **One assertion per test** (when reasonable) for clear failure messages
-- **Arrange-Act-Assert** pattern for readability
-- **Mock external dependencies** to isolate the unit under test
-- **Test behavior, not implementation** to allow refactoring
-- **Include edge cases**: null, undefined, empty, boundary values
-- **Error testing**: Verify proper error handling and messages
+- **Happy path** - Normal, expected inputs
+- **Edge cases** - Boundaries, empty, null, zero
+- **Errors** - Invalid inputs, exceptions
+- **Integration** - Mocks/stubs for dependencies
 
-## Output Format
+## Quality Guidelines
 
-Generate tests with:
-1. Import/require statements for testing framework and code under test
-2. Clear describe/suite blocks organizing related tests
-3. Setup/teardown if needed for test initialization
+- **Clear names** - Describe what's tested and expected outcome
+- **One assertion** - Per test when reasonable
+- **AAA pattern** - Arrange, Act, Assert
+- **Mock dependencies** - Isolate unit under test
+- **Test behavior** - Not implementation details
+- **Include edge cases** - null, empty, boundary values
+
+## Output Structure
+
+1. Imports (framework + code under test)
+2. Describe/suite blocks grouping related tests
+3. Setup/teardown if needed
 4. Individual test cases with descriptive names
-5. Inline comments for complex test logic
-6. Proper assertions using framework-specific matchers
-
-See [examples.md](examples.md) for framework-specific examples.
+5. Clear assertions using framework matchers
